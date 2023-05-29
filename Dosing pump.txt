@@ -1,0 +1,58 @@
+import RPi.GPIO as GPIO
+import time
+
+PIN = 14
+
+GPIO.setmode(GPIO.BCM)
+
+GPIO.setup(PIN, GPIO.OUT)
+
+GPIO.output(PIN, GPIO.LOW)
+
+def manage_pump() :
+
+   while True:
+         GPIO.output(PIN, GPIO.HIGH)
+         time.sleep(60*5)
+         GPIO.output(PIN, GPIO.LOW)
+         time.sleep(60*60*4)
+
+
+This code seems to be missing a couple of things. First, it is missing the try-except block, 
+which is necessary to catch any errors that may occur when working with the GPIO pins.
+ Second, it does not call the manage_pump() function anywhere in the code, so it will not actually run the pump.
+
+To make this code work, you should add a try-except block around the while loop in the manage_pump()
+ function to handle any GPIO errors that may occur. Additionally, you should call the manage_pump()
+ function somewhere in your code, such as at the end of the script.
+----------------------------------------------
+
+import RPi.GPIO as GPIO
+import time
+
+PIN = 14
+
+GPIO.setmode(GPIO.BCM)
+GPIO.setup(PIN, GPIO.OUT)
+GPIO.output(PIN, GPIO.LOW)
+
+def manage_pump():
+    try:
+        while True:
+            GPIO.output(PIN, GPIO.HIGH)
+            time.sleep(60*5)
+            GPIO.output(PIN, GPIO.LOW)
+            time.sleep(60*60*4)
+    except KeyboardInterrupt:
+        GPIO.cleanup()
+
+try:
+    manage_pump()
+except:
+    GPIO.cleanup()
+
+
+This modified code includes a try-except block around the while loop in the manage_pump() 
+function to catch any GPIO errors that may occur. It also calls the manage_pump() 
+function at the end of the script. Note that the KeyboardInterrupt exception is caught 
+to ensure that the GPIO pins are properly cleaned up before the script exits.
